@@ -1,4 +1,4 @@
-# 🕸️ LangGraph — Complete Beginner to Advanced Guide
+# LangGraph — Complete Beginner to Advanced Guide
 
 > A step-by-step knowledge transfer on **LangGraph** — from core concepts to production-grade agentic patterns, with runnable code examples.
 
@@ -30,7 +30,7 @@
 
 ---
 
-## 🧩 1. What is LangGraph?
+## 1. What is LangGraph?
 
 If you've used **LangChain**, you know it's great for linear pipelines: `A → B → C`.
 
@@ -46,7 +46,7 @@ uv add langgraph langchain-core
 
 ---
 
-## 🗂️ 2. State — The Heart of LangGraph
+## 2. State — The Heart of LangGraph
 
 **State** is a shared object that flows through every node in the graph. Every node can **read** it and **update** it.
 
@@ -62,7 +62,7 @@ class AgentState(TypedDict):
 
 ---
 
-## 📐 3. TypedDict — Defining State Shape
+## 3. TypedDict — Defining State Shape
 
 `TypedDict` defines a **fixed schema** for a dictionary — like a lightweight class saying "this dict will always have these keys with these types."
 
@@ -80,14 +80,14 @@ class AgentState(TypedDict):
 | Option | Pros / Cons |
 |---|---|
 | Plain `dict` | No type safety — typos in keys go unnoticed |
-| `TypedDict` | ✅ IDE autocomplete + type checks, **zero runtime overhead** |
+| `TypedDict` | IDE autocomplete + type checks, **zero runtime overhead** |
 | `Pydantic BaseModel` | Runtime validation, but adds performance overhead per node call |
 
 Since state passes through nodes constantly, `TypedDict` is preferred for speed. At runtime, it's literally just a normal Python `dict`.
 
 ---
 
-## 🏷️ 4. Annotated & Reducers
+## 4. Annotated & Reducers
 
 `Annotated` attaches **extra metadata** to a type without changing the type itself. In LangGraph, it's used to define a **reducer** — the function that controls *how* a node's return value merges into existing state.
 
@@ -114,11 +114,11 @@ def n2(state): return {"messages": ["how are you"]}
 # final state["messages"] = ["hi", "how are you"]  → both kept
 ```
 
-> 💡 **Rule of thumb:** `TypedDict` = shape of state. `Annotated` = merge behavior per key.
+> **Rule of thumb:** `TypedDict` = shape of state. `Annotated` = merge behavior per key.
 
 ---
 
-## 🔀 5. Types of Reducers
+## 5. Types of Reducers
 
 | Reducer | Behavior | Typical Use Case |
 |---|---|---|
@@ -164,7 +164,7 @@ builder.add_conditional_edges("start", continue_to_analysis, ["analyze_topic"])
 
 ---
 
-## ⚙️ 6. Node
+## 6. Node
 
 A **node** is just a Python function. It takes `state` as input and returns a **partial dict** — only the keys it wants to update.
 
@@ -177,11 +177,11 @@ def answer_question(state: AgentState) -> AgentState:
     return {"answer": ans}
 ```
 
-> ⚠️ A node should **never** return the entire state — only the fields it's changing.
+> A node should **never** return the entire state — only the fields it's changing.
 
 ---
 
-## 🏗️ 7. Building a StateGraph
+## 7. Building a StateGraph
 
 ```python
 from langgraph.graph import StateGraph, START, END
@@ -206,7 +206,7 @@ print(result)
 
 ---
 
-## 🔗 8. Edge vs Conditional Edge
+## 8. Edge vs Conditional Edge
 
 | Type | Behavior |
 |---|---|
@@ -235,7 +235,7 @@ builder.add_conditional_edges(
 
 ---
 
-## 🧵 9. Conditional Edge — Line by Line
+## 9. Conditional Edge — Line by Line
 
 ```python
 def route_decision(state: AgentState) -> str:
@@ -268,11 +268,11 @@ builder.add_conditional_edges(
 4. LangGraph looks up that label in the mapping dict → finds the real node name.
 5. Execution jumps to that node.
 
-> 🧠 **Analogy:** Like an SCCM Task Sequence condition step — "if OS is Windows 11 → Task Group A, else → Task Group B."
+> **Analogy:** Like an SCCM Task Sequence condition step — "if OS is Windows 11 → Task Group A, else → Task Group B."
 
 ---
 
-## 🔁 10. Loops (Cyclic Graphs)
+## 10. Loops (Cyclic Graphs)
 
 This is where LangGraph shines over plain LangChain — you can loop back to a previous node.
 
@@ -292,11 +292,11 @@ builder.add_conditional_edges(
 )
 ```
 
-> ⚠️ Always define an exit condition — otherwise it's an infinite loop. LangGraph raises `GraphRecursionError` after the default limit (25 steps), configurable via `recursion_limit`.
+> Always define an exit condition — otherwise it's an infinite loop. LangGraph raises `GraphRecursionError` after the default limit (25 steps), configurable via `recursion_limit`.
 
 ---
 
-## 💾 11. Checkpointing / Memory
+## 11. Checkpointing / Memory
 
 Checkpointers save a state snapshot after every node execution — enabling **persistent memory** across turns/sessions.
 
@@ -323,7 +323,7 @@ checkpointer = SqliteSaver.from_conn_string("checkpoints.db")
 
 ---
 
-## 🧍 12. Human-in-the-Loop
+## 12. Human-in-the-Loop
 
 Pause execution before/after a critical node — e.g. requiring approval before an agent sends an email or deletes data.
 
@@ -344,7 +344,7 @@ graph.invoke(None, config=config)   # None = resume from where it paused
 
 ---
 
-## ⚡ 13. Parallel Execution (Fan-out / Fan-in)
+## 13. Parallel Execution (Fan-out / Fan-in)
 
 Multiple nodes can run **concurrently** from one source, then merge results.
 
@@ -373,7 +373,7 @@ builder.add_edge("merge", END)
 
 ---
 
-## 🧱 14. Subgraphs
+## 14. Subgraphs
 
 A compiled graph can be nested **inside** another graph as a single node — great for modular, reusable workflows.
 
@@ -394,7 +394,7 @@ parent_builder.add_edge("sub_workflow", END)
 
 ---
 
-## 🤖 15. Tool-Calling Agent (ReAct Pattern)
+## 15. Tool-Calling Agent (ReAct Pattern)
 
 The most common real-world LangGraph pattern: the LLM decides to call a tool, the tool executes, results loop back to the LLM — until a final answer is ready.
 
@@ -439,7 +439,7 @@ graph = builder.compile()
 
 ---
 
-## 📡 16. Streaming
+## 16. Streaming
 
 ```python
 for chunk in graph.stream(
@@ -457,7 +457,7 @@ for chunk in graph.stream(
 
 ---
 
-## 📋 17. Cheat Sheet / Summary
+## 17. Cheat Sheet / Summary
 
 | Concept | Purpose |
 |---|---|
@@ -479,7 +479,7 @@ for chunk in graph.stream(
 
 ---
 
-## 🎯 Quick Recap Flow
+## Quick Recap Flow
 
 ```
 START → Node → Conditional Edge → (Loop back?) → Node → END
