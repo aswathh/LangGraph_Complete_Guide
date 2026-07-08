@@ -8,7 +8,7 @@
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [What is LangGraph?](#-1-what-is-langgraph)
 2. [State — The Heart of LangGraph](#-2-state--the-heart-of-langgraph)
@@ -488,8 +488,8 @@ START → Node → Conditional Edge → (Loop back?) → Node → END
 
 ---
 
-### 🙌 Author Notes
+### Author Notes
 
 Compiled as part of hands-on LangGraph learning while building agentic AI projects (RAG pipelines, EDA automation agents, and tool-calling assistants).
 
-Feel free to ⭐ this repo if it helped you get started with LangGraph!
+Feel free to this repo if it helped you get started with LangGraph!
